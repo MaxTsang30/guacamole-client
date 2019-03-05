@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InetGuacamoleSocket implements GuacamoleSocket {
 
+
     /**
      * Logger for this class.
      */
