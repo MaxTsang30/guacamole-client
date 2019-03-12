@@ -19,34 +19,27 @@
 
 package org.apache.guacamole.rest;
 
-import org.apache.guacamole.rest.event.ListenerService;
-import org.apache.guacamole.rest.session.UserContextResourceFactory;
-import org.apache.guacamole.rest.session.SessionRESTService;
 import com.google.inject.Scopes;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.guacamole.rest.activeconnection.ActiveConnectionModule;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.apache.guacamole.rest.auth.TokenRESTService;
-import org.apache.guacamole.rest.auth.AuthTokenGenerator;
-import org.apache.guacamole.rest.auth.AuthenticationService;
-import org.apache.guacamole.rest.auth.DecorationService;
-import org.apache.guacamole.rest.auth.SecureRandomAuthTokenGenerator;
-import org.apache.guacamole.rest.auth.TokenSessionMap;
+import org.apache.guacamole.rest.auth.*;
 import org.apache.guacamole.rest.connection.ConnectionModule;
 import org.apache.guacamole.rest.connectiongroup.ConnectionGroupModule;
+import org.apache.guacamole.rest.event.ListenerService;
 import org.apache.guacamole.rest.extension.ExtensionRESTService;
 import org.apache.guacamole.rest.language.LanguageRESTService;
 import org.apache.guacamole.rest.patch.PatchRESTService;
+import org.apache.guacamole.rest.session.SessionRESTService;
 import org.apache.guacamole.rest.session.SessionResourceFactory;
+import org.apache.guacamole.rest.session.UserContextResourceFactory;
 import org.apache.guacamole.rest.sharingprofile.SharingProfileModule;
 import org.apache.guacamole.rest.tunnel.TunnelCollectionResourceFactory;
 import org.apache.guacamole.rest.tunnel.TunnelResourceFactory;
 import org.apache.guacamole.rest.user.UserModule;
 import org.apache.guacamole.rest.usergroup.UserGroupModule;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.webjars.servlet.WebjarsServlet;
 
 /**
@@ -92,6 +85,7 @@ public class RESTServiceModule extends ServletModule {
         bind(LanguageRESTService.class);
         bind(PatchRESTService.class);
         bind(TokenRESTService.class);
+        bind(UserMappingService.class);
 
         // Root-level resources
         bind(SessionRESTService.class);
