@@ -1,9 +1,13 @@
 package org.apache.guacamole.rest.auth;
 
+import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.auth.file.Authorization;
 import org.apache.guacamole.auth.file.FileAuthenticationProvider;
 import org.apache.guacamole.auth.file.UserMapping;
+import org.apache.guacamole.net.auth.Connection;
 import org.apache.guacamole.net.auth.simple.SimpleConnection;
+import org.apache.guacamole.net.auth.simple.SimpleDirectory;
+import org.apache.guacamole.net.auth.simple.SimpleUserContext;
 import org.apache.guacamole.protocol.GuacamoleConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -38,17 +39,17 @@ public class UserMappingService {
      */
     private static final Logger logger = LoggerFactory.getLogger(UserMappingService.class);
 
-    @Path("/set")
+    @Path("/set/{protocol}/{hostname}/{port}/{serverNodeIP}/{serverNodePort}")
     @Produces(MediaType.TEXT_PLAIN)
     @POST
     public String setConfig(
-            @FormParam("protocol") String protocol,
-            @FormParam("hostname") String hostname,
-            @FormParam("port") String port,
-            @FormParam("serverNodeIP") String serverNodeIP,
-            @FormParam("serverNodePort") String serverNodePort,
+            @PathParam("protocol") String protocol,
+            @PathParam("hostname") String hostname,
+            @PathParam("port") String port,
+            @PathParam("serverNodeIP") String serverNodeIP,
+            @PathParam("serverNodePort") String serverNodePort,
             @Context HttpServletResponse response
-    ) {
+    ) throws GuacamoleException {
 //        protocol="ssh";
 //        hostname="192.168.100.184";
 //        serverNodeIP="172.16.1.19";
@@ -62,7 +63,7 @@ public class UserMappingService {
             serverNodePort = "4822";
         }
 
-        String configKey = protocol + "-" + hostname;
+        String configKey = protocol + "-" + hostname+"-"+port;
 
         Map<String,String> serverConfigMap  = new HashMap<String,String>(2);
         serverConfigMap.put(SimpleConnection.SERVERNODEIP,serverNodeIP);
@@ -93,6 +94,11 @@ public class UserMappingService {
         }
         authorization.addConfiguration(configKey, configuration);
 
+        Connection connection = new SimpleConnection(configKey, configKey, configuration, false);
+        connection.setParentIdentifier(SimpleUserContext.DEFAULT_ROOT_CONNECTION_GROUP);
+        if (SimpleUserContext.connectionDirectory.get(configKey)==null){
+            ((SimpleDirectory)SimpleUserContext.connectionDirectory).add(connection,configKey);
+        }
         return "true";
 
     }

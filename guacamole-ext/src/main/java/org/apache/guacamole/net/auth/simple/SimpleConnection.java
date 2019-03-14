@@ -215,7 +215,7 @@ public class SimpleConnection extends AbstractConnection {
         String hostname = proxyConfig.getHostname();
         int port = proxyConfig.getPort();
 
-        String configKey = filteredConfig.getProtocol()+"-"+ filteredConfig.getParameter("hostname");
+        String configKey = filteredConfig.getProtocol()+"-"+ filteredConfig.getParameter("hostname")+"-"+filteredConfig.getParameter("port");
 
         Map<String, String> configMap = serverNodeMap.get(configKey);
         if(configMap.containsKey(SERVERNODEIP)){

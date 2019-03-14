@@ -40,7 +40,7 @@ public abstract class AbstractUserContext implements UserContext {
      * The unique identifier that will be used for the root connection group if
      * {@link #getRootConnectionGroup()} is not overridden.
      */
-    protected static final String DEFAULT_ROOT_CONNECTION_GROUP = "ROOT";
+    public static final String DEFAULT_ROOT_CONNECTION_GROUP = "ROOT";
 
     /**
      * {@inheritDoc}

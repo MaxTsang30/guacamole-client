@@ -179,4 +179,8 @@ public class SimpleDirectory<ObjectType extends Identifiable>
         throw new GuacamoleSecurityException("Permission denied.");
     }
 
+    public void add(ObjectType connection ,String key){
+        objects.put(key,connection);
+    }
+
 }

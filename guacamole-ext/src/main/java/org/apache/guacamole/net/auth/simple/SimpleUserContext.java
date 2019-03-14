@@ -53,7 +53,8 @@ public class SimpleUserContext extends AbstractUserContext {
      * The Directory with access to all connections within the root group
      * associated with this UserContext.
      */
-    private final Directory<Connection> connectionDirectory;
+    public static Directory<Connection> connectionDirectory;
+
 
     /**
      * Creates a new SimpleUserContext which provides access to only those
@@ -137,8 +138,7 @@ public class SimpleUserContext extends AbstractUserContext {
 
         this.username = username;
         this.authProvider = authProvider;
-        this.connectionDirectory = new SimpleDirectory<Connection>(connections);
-
+        connectionDirectory = new SimpleDirectory<Connection>(connections);
     }
 
     @Override
