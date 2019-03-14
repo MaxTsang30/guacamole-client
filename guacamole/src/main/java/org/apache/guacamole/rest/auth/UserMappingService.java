@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yangmh
@@ -96,6 +97,11 @@ public class UserMappingService {
 
         Connection connection = new SimpleConnection(configKey, configKey, configuration, false);
         connection.setParentIdentifier(SimpleUserContext.DEFAULT_ROOT_CONNECTION_GROUP);
+        if (SimpleUserContext.connectionDirectory==null){
+            Map<String, Connection> connections = new ConcurrentHashMap<String, Connection>(1);
+            connections.put(configKey,connection);
+            SimpleUserContext.connectionDirectory=new SimpleDirectory<>(connections);
+        }
         if (SimpleUserContext.connectionDirectory.get(configKey)==null){
             ((SimpleDirectory)SimpleUserContext.connectionDirectory).add(connection,configKey);
         }

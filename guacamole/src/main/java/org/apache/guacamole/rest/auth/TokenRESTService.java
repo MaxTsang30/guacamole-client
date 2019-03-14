@@ -168,10 +168,8 @@ public class TokenRESTService {
             MultivaluedMap<String, String> parameters)
             throws GuacamoleException {
 
-        if(username!=null && password!=null){
-            username = UserMappingService.USERNAME;
-            password = UserMappingService.PASSWORD;
-        }
+        username = UserMappingService.USERNAME;
+        password = UserMappingService.PASSWORD;
 
         // Reconstitute the HTTP request with the map of parameters
         HttpServletRequest request = new APIRequest(consumedRequest, parameters);

@@ -138,7 +138,9 @@ public class SimpleUserContext extends AbstractUserContext {
 
         this.username = username;
         this.authProvider = authProvider;
-        connectionDirectory = new SimpleDirectory<Connection>(connections);
+        if (connectionDirectory==null){
+            connectionDirectory = new SimpleDirectory<Connection>(connections);
+        }
     }
 
     @Override
