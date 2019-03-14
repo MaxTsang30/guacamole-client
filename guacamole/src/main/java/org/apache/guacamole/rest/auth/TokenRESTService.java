@@ -36,7 +36,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleResourceNotFoundException;
+import org.apache.guacamole.auth.file.Authorization;
+import org.apache.guacamole.auth.file.FileAuthenticationProvider;
 import org.apache.guacamole.net.auth.AuthenticatedUser;
+import org.apache.guacamole.net.auth.AuthenticationProvider;
 import org.apache.guacamole.net.auth.Credentials;
 import org.apache.guacamole.net.auth.UserContext;
 import org.apache.guacamole.GuacamoleSession;
@@ -86,6 +89,8 @@ public class TokenRESTService {
 
         // If no username/password given, try Authorization header
         if (username == null && password == null) {
+
+
 
             String authorization = request.getHeader("Authorization");
             if (authorization != null && authorization.startsWith("Basic ")) {
@@ -163,6 +168,11 @@ public class TokenRESTService {
             MultivaluedMap<String, String> parameters)
             throws GuacamoleException {
 
+        if(username!=null && password!=null){
+            username = UserMappingService.USERNAME;
+            password = UserMappingService.PASSWORD;
+        }
+
         // Reconstitute the HTTP request with the map of parameters
         HttpServletRequest request = new APIRequest(consumedRequest, parameters);
 
@@ -185,6 +195,14 @@ public class TokenRESTService {
 
         // Return possibly-new auth token
         AuthenticatedUser authenticatedUser = session.getAuthenticatedUser();
+//        AuthenticationProvider authenticationProvider = authenticatedUser.getAuthenticationProvider();
+//        authenticationProvider.g
+//
+//
+//        Authorization authorization = FileAuthenticationProvider.cachedUserMapping.getAuthorization(UserMappingService.USERNAME);
+//        authorization.getConfigurations();
+
+
         return new APIAuthenticationResult(
             token,
             authenticatedUser.getIdentifier(),
