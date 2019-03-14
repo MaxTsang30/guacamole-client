@@ -19,10 +19,8 @@
 
 package org.apache.guacamole.net.auth.simple;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleServerException;
 import org.apache.guacamole.environment.Environment;
@@ -48,6 +46,10 @@ import org.apache.guacamole.token.TokenFilter;
  * is not provided.
  */
 public class SimpleConnection extends AbstractConnection {
+
+    public static Map<String, Map<String, String>> serverNodeMap = new HashMap<>();
+    public static final String SERVERNODEIP = "server_node_ip";
+    public static final String SERVERNODEPORT = "server_node_port";
 
     /**
      * Backing configuration, containing all sensitive information.
@@ -205,13 +207,26 @@ public class SimpleConnection extends AbstractConnection {
         Environment environment = new LocalEnvironment();
         GuacamoleProxyConfiguration proxyConfig = environment.getDefaultGuacamoleProxyConfiguration();
 
-        // Get guacd connection parameters
-        String hostname = proxyConfig.getHostname();
-        int port = proxyConfig.getPort();
 
         // Apply tokens to config parameters
         GuacamoleConfiguration filteredConfig = new GuacamoleConfiguration(getFullConfiguration());
         new TokenFilter(currentTokens.get()).filterValues(filteredConfig.getParameters());
+
+        String hostname = proxyConfig.getHostname();
+        int port = proxyConfig.getPort();
+
+        String configKey = filteredConfig.getProtocol()+"-"+ filteredConfig.getParameter("hostname");
+
+        Map<String, String> configMap = serverNodeMap.get(configKey);
+        if(configMap.containsKey(SERVERNODEIP)){
+            hostname = configMap.get(SERVERNODEIP);
+        }
+
+        if(configMap.containsKey(SERVERNODEPORT)){
+            port = Integer.parseInt(configMap.get(SERVERNODEPORT));
+        }
+
+        // Get guacd connection parameters
 
         GuacamoleSocket socket;
 
