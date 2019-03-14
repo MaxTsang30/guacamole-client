@@ -30,6 +30,7 @@ import org.apache.guacamole.environment.Environment;
 import org.apache.guacamole.environment.LocalEnvironment;
 import org.apache.guacamole.net.auth.Credentials;
 import org.apache.guacamole.net.auth.simple.SimpleAuthenticationProvider;
+import org.apache.guacamole.rest.auth.UserMappingService;
 import org.apache.guacamole.xml.DocumentHandler;
 import org.apache.guacamole.protocol.GuacamoleConfiguration;
 import org.slf4j.Logger;
@@ -58,7 +59,7 @@ public class FileAuthenticationProvider extends SimpleAuthenticationProvider {
     /**
      * The parsed UserMapping read when the user mapping file was last parsed.
      */
-    private UserMapping cachedUserMapping;
+    public static UserMapping cachedUserMapping;
 
     /**
      * Guacamole server environment.
@@ -96,6 +97,7 @@ public class FileAuthenticationProvider extends SimpleAuthenticationProvider {
      *     A UserMapping containing all authorization data within the user
      *     mapping XML file, or null if the file cannot be found/parsed.
      */
+/*
     private UserMapping getUserMapping() {
 
         // Read user mapping from GUACAMOLE_HOME/user-mapping.xml
@@ -165,6 +167,26 @@ public class FileAuthenticationProvider extends SimpleAuthenticationProvider {
         }
 
         // Return (possibly cached) user mapping
+        return cachedUserMapping;
+
+    }
+*/
+
+
+    private UserMapping getUserMapping(){
+        if(cachedUserMapping  == null){
+            cachedUserMapping  = new UserMapping();
+
+            Authorization authorization = new Authorization();
+            authorization.setUsername(UserMappingService.USERNAME);
+            authorization.setPassword(UserMappingService.PASSWORD);
+
+            //获取连接配置
+            cachedUserMapping.addAuthorization(authorization);
+
+            return  cachedUserMapping;
+        }
+
         return cachedUserMapping;
 
     }
