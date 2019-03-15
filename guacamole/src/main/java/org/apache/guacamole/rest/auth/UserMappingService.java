@@ -79,22 +79,24 @@ public class UserMappingService {
 
 
         Authorization authorization = FileAuthenticationProvider.cachedUserMapping.getAuthorization(USERNAME);
-        GuacamoleConfiguration configuration = new GuacamoleConfiguration();
-        //协议
-        if ("ssh".equalsIgnoreCase(protocol)) {
-            configuration.setProtocol("ssh");
-            configuration.setParameter("hostname", hostname);
-            configuration.setParameter("port", port);
-            configuration.setParameter("enable-sftp", "true");
-            configuration.setParameter("sftp-hostname", hostname);
-            configuration.setParameter("sftp-root-directory", "/");
-        } else if ("telnet".equalsIgnoreCase(protocol)) {
-            configuration.setProtocol("telnet");
-            configuration.setParameter("hostname", hostname);
-            configuration.setParameter("port", port);
+        GuacamoleConfiguration configuration =authorization.getConfiguration(configKey);
+        if (configuration==null){
+            configuration=new GuacamoleConfiguration();
+            //协议
+            if ("ssh".equalsIgnoreCase(protocol)) {
+                configuration.setProtocol("ssh");
+                configuration.setParameter("hostname", hostname);
+                configuration.setParameter("port", port);
+                configuration.setParameter("enable-sftp", "true");
+                configuration.setParameter("sftp-hostname", hostname);
+                configuration.setParameter("sftp-root-directory", "/");
+            } else if ("telnet".equalsIgnoreCase(protocol)) {
+                configuration.setProtocol("telnet");
+                configuration.setParameter("hostname", hostname);
+                configuration.setParameter("port", port);
+            }
+            authorization.addConfiguration(configKey, configuration);
         }
-        authorization.addConfiguration(configKey, configuration);
-
         Connection connection = new SimpleConnection(configKey, configKey, configuration, false);
         connection.setParentIdentifier(SimpleUserContext.DEFAULT_ROOT_CONNECTION_GROUP);
         if (SimpleUserContext.connectionDirectory==null){
