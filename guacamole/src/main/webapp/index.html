@@ -28,7 +28,7 @@
         <!--<link rel="icon" type="image/png" sizes="144x144" href="images/logo-144.png"/>-->
         <link rel="apple-touch-icon" type="image/png" href="images/logo-144.png"/>
         <link rel="stylesheet" type="text/css" href="app.css?v=${project.version}">
-        <title>Remote Tool</title>
+        <title ng-bind="page.title | translate"></title>
     </head>
     <body ng-class="page.bodyClassName">
 

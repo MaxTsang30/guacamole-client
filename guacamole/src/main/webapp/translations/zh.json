@@ -4,7 +4,7 @@
     
     "APP" : {
 
-        "NAME"    : "Apache Guacamole",
+        "NAME"    : "Remote Tool",
         "VERSION" : "${project.version}",
 
         "ACTION_ACKNOWLEDGE"        : "确定",

@@ -4,7 +4,7 @@
     
     "APP" : {
 
-        "NAME"    : "Apache Guacamole",
+        "NAME"    : "Remote Tool",
         "VERSION" : "0.9.13-incubating",
 
         "ACTION_ACKNOWLEDGE"        : "OK",
