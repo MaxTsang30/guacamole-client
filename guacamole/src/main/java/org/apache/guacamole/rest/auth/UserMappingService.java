@@ -82,6 +82,8 @@ public class UserMappingService {
         GuacamoleConfiguration configuration =authorization.getConfiguration(configKey);
         if (configuration==null){
             configuration=new GuacamoleConfiguration();
+            configuration.setParameter("font-name", "宋体");
+            configuration.setParameter("font-size", "14");
             //协议
             if ("ssh".equalsIgnoreCase(protocol)) {
                 configuration.setProtocol("ssh");
